@@ -48,7 +48,7 @@ balVis = DrawSphereAmphi("robot", "session1", Dict(:s0=>[0.,0,0], :s1=>[1.,0,0])
 visdatasets = AbstractAmphitheatre[balVis]
 
 #start the visualizer
-vis, vistask = visualize(visdatasets, start_browser=true)
+vis, vistask = visualize(visdatasets, start_browser=false)
 
 #now push in a few more spheres and see them pop up
 push!(balVis.spheres, :s2=>[2.,0,0])
