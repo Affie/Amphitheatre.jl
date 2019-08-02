@@ -1,0 +1,13 @@
+name = "Amphitheatre"
+uuid = "459d7ec6-b50f-11e9-0cf6-237a58fb3708"
+authors = ["Johannes Terblanche"]
+version = "0.1.0"
+
+[compat]
+julia = "1.4"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
