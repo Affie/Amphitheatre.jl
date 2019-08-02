@@ -2,5 +2,9 @@ using Amphitheatre
 using Test
 
 @testset "Amphitheatre.jl" begin
-    # Write your own tests here.
+
+    @testset "Examples" begin
+        @info "Testing if examples run"
+        include("../example/extendingAmphi.jl")
+    end
 end
