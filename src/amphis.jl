@@ -88,19 +88,35 @@ function visualize!(vis::Visualizer, basicfg::BasicFactorGraphPose)::Nothing
     for v in vars
 		vsym = v.label
 
-        # get vertex and estimate from the factor graph object
-        X = getKDE(v)
+		ppe = DistributedFactorGraphs.estimate(v)
+		if ppe == nothing
+	        # get vertex and estimate from the factor graph object
+	        X = getKDE(v)
 
-        xmx = basicfg.meanmax == :max ? getKDEMax(X) : getKDEMean(X)
+	        xmx = basicfg.meanmax == :max ? getKDEMax(X) : getKDEMean(X)
+			# get the variable type
+	        typestr = split(solverData(v).softtype |> typeof |> string, ".")[end]
+			typesym = Symbol(typestr)
 
-        # get the variable type
-        typestr = split(getData(v).softtype |> typeof |> string, ".")[end]
-		typesym = Symbol(typestr)
+			nodef = getfield(Amphitheatre, typesym)
 
-		nodef = getfield(Amphitheatre, typesym)
+			#NOTE make sure storage order and softtypes are always the same
+			nodestruct = nodef(xmx...)
 
-		#NOTE make sure storage order and softtypes are always the same
-		nodestruct = nodef(xmx...)
+		else
+			#TODO find a better way to use VariableEstimate
+			# with this RoME pose and ampi pose has to be kept consistent.
+			#TODO maybe use timestamp?
+			varEst = ppe[basicfg.meanmax]
+
+			typestr = split(softtype(v) |> string, ".")[end]
+			typesym = Symbol(typestr)
+			nodef = getfield(Amphitheatre, typesym)
+
+			nodestruct = nodef(varEst.estimate...)
+		end
+
+
 
 		if in(:POSE, v.tags)
 			groupsym = :poses
@@ -137,6 +153,8 @@ function visualize!(vis::Visualizer, basicfg::BasicFactorGraphPose)::Nothing
 
 		#FIXME this is bad, but just testing feature TODO figure out how to do it properly
 		basicfg.drawPath && groupsym == :poses && push!(trackPoints, Point3f0(xmx[1],xmx[2],0.0))
+
+	# sleep(0.1)
 
     end
 

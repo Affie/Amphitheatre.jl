@@ -86,46 +86,46 @@ function visNode!(vis::Visualizer,
 	              pose::Pose2,
 				  updateonly::Bool=false;
 				  zoffset::Float64=0.0,
-				  # kwargs...)::Nothing
-				  scale::Float64=0.2,
-				  sphereScale::Float64=0.05,
-				  color::RGBA=RGBA(1., 1, 0, 0.5))::Nothing
+				  kwargs...)::Nothing
+				  # scale::Float64=0.2,
+				  # sphereScale::Float64=0.05,
+				  # color::RGBA=RGBA(1., 1, 0, 0.5))::Nothing
 
 	tf = Translation(pose.x, pose.y, zoffset) ∘ LinearMap(CTs.RotZ(pose.θ))
-	visPose!(vis, tf, updateonly, #kwargs...)
-					  scale=scale,
-					  sphereScale=sphereScale,
-					  color=color)
+	visPose!(vis, tf, updateonly; kwargs...)
+					  # scale=scale,
+					  # sphereScale=sphereScale,
+					  # color=color)
 end
 
 function visNode!(vis::Visualizer,
             	  point::Point2,
 				  updateonly::Bool=false;
                   zoffset::Float64=0.0,
-				  # kwargs...)::Nothing
-				  scale::Float64=0.1, #TODO i tried with kwargs...), but missing something
-				  sphereScale::Float64=0.1,
-				  color::RGBA=RGBA(0., 1, 0, 0.5))::Nothing
+				  kwargs...)::Nothing
+				  # scale::Float64=0.1, #TODO i tried with kwargs...), but missing something
+				  # sphereScale::Float64=0.1,
+				  # color::RGBA=RGBA(0., 1, 0, 0.5))::Nothing
 
 	tf = Translation(point.x, point.y, zoffset)
-	visPoint!(vis, tf, updateonly, #kwargs...)
-					   scale=scale,
-					   sphereScale=sphereScale,
-					   color=color)
+	visPoint!(vis, tf, updateonly; kwargs...)
+					   # scale=scale,
+					   # sphereScale=sphereScale,
+					   # color=color)
 end
 
 function visNode!(vis::Visualizer,
             	  point::Point3,
 				  updateonly::Bool=false;
 				  zoffset::Float64=0.0,
-				  # kwargs...)::Nothing
-				  scale::Float64=0.1, #unused but needed for uniformity #TODO maybe replace params with dictionary?
-				  sphereScale::Float64=0.1,
-				  color::RGBA=RGBA(0., 1, 0, 0.5))::Nothing
+				  kwargs...)::Nothing
+				  # scale::Float64=0.1, #unused but needed for uniformity #TODO maybe replace params with dictionary?
+				  # sphereScale::Float64=0.1,
+				  # color::RGBA=RGBA(0., 1, 0, 0.5))::Nothing
 
 	tf = Translation(point...)
-	visPoint!(vis, tf, updateonly, #kwargs...)
-					   scale=scale,
-					   sphereScale=sphereScale,
-					   color=color)
+	visPoint!(vis, tf, updateonly; kwargs...)
+					   # scale=scale,
+					   # sphereScale=sphereScale,
+					   # color=color)
 end

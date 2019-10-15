@@ -28,6 +28,7 @@ TransformUtils = "9b8138ad-1b09-5408-aa39-e87ed6d21b63"
 [compat]
 julia = "0.7, 1"
 IncrementalInference = "≥ 0.7.3" #update this to a vertion that will work 0.8.0?
+MeshCat = "0.8.0"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"

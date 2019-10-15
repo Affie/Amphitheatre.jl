@@ -60,7 +60,7 @@ include("common.jl")
 include("amphis.jl")
 include("pointclouds.jl")
 # TODO include("pointcloudAmphis.jl")
-# TODO include("reprojectAmphis.jl")
+include("reprojectAmphis.jl") #TODO
 
 
 global runAmphi = true
@@ -79,7 +79,8 @@ Initialize empty visualizer window with home axis.  New browser window will be o
 function startMeshCatVisualizer(;host=ip"127.0.0.1",
 								 start_browser::Bool=true,
                                  draworigin::Bool=true,
-                                 originscale::Float64=1.0)
+                                 originscale::Float64=1.0,
+								 openMux::Bool=true)
 
     viz = MeshCat.Visualizer()
     if draworigin
@@ -87,7 +88,7 @@ function startMeshCatVisualizer(;host=ip"127.0.0.1",
     end
 
     # open a new browser tab if required
-	open(viz, host=host, start_browser=start_browser)
+	openMux && open(viz, host=host, start_browser=start_browser)
 
     return viz
 end
@@ -104,7 +105,8 @@ function visualize(visdatasets::Vector{AbstractAmphitheatre};
 				   	host=ip"127.0.0.1",
 					start_browser::Bool=true,
 				    draworigin::Bool=true,
-				    originscale::Float64=1.0)
+				    originscale::Float64=1.0,
+					openMux::Bool=true)
     #
     global runAmphi
 
@@ -114,7 +116,8 @@ function visualize(visdatasets::Vector{AbstractAmphitheatre};
     vis = startMeshCatVisualizer(host=host,
 								 start_browser=start_browser,
 								 draworigin=draworigin,
-								 originscale=originscale)
+								 originscale=originscale,
+								 openMux=openMux)
 	setGlobalDrawTransform!(vis, trans=trans, quat=quat)
 
     # run the visualization loop #TODO add is task done to avoid multiple tasks getting lost
