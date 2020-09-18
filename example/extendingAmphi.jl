@@ -5,7 +5,7 @@ using Amphitheatre
 import Amphitheatre: visualize!
 
 # using some usefull drawing functions
-using MeshCat, GeometryTypes, CoordinateTransformations
+using MeshCat, GeometryBasics, CoordinateTransformations
 # ============================================================
 # --------------------DrawSphereInMeshCat--------------------
 # ============================================================
@@ -30,7 +30,7 @@ function visualize!(vis::Visualizer, sa::DrawSphereAmphi)::Nothing
 		if !get(sa.isdrawn, key, false)
 			haskey(sa.isdrawn, key) ? sa.isdrawn[key] = true : push!(sa.isdrawn, key=>true)
 
-			sphere = HyperSphere(Point(0., 0, 0), sa.sphereScale)
+			sphere = GeometryBasics.HyperSphere(GeometryBasics.Point(0., 0, 0), sa.sphereScale)
 			matcolor = MeshPhongMaterial(color=RGBA(0,1,0,0.5))
 			setobject!(vis[sa.robotId][sa.sessionId][key], sphere, matcolor)
 		end
