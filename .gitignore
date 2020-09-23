@@ -2,5 +2,6 @@
 *.jl.cov
 *.jl.mem
 .DS_Store
+.vscode
 /Manifest.toml
 /dev/

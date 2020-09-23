@@ -2,6 +2,8 @@
 abstract type AbstractPointPose end
 #NOTE names should match soft type names with, eg. Pose2 and Point2
 
+# TODO look at replacing with traits
+
 mutable struct Pose2{T<:AbstractFloat} <: AbstractPointPose
 	x::T
 	y::T
@@ -27,10 +29,10 @@ Example:
 ```julia
 # default is Z up
 # make Z down
-setGlobalDrawTransform!(vis, quat=Quat(0.0,1.0,0.0,0.0))
+setGlobalDrawTransform!(vis, quat=UnitQuaternion(0.0,1.0,0.0,0.0))
 ```
 """
-function setGlobalDrawTransform!(vis::Visualizer;trans=Translation(0.0,0.0,0.0), quat::Rotations.Quat=Quat(1.0,0.0,0.0,0.0))
+function setGlobalDrawTransform!(vis::Visualizer;trans=Translation(0.0,0.0,0.0), quat::Rotations.UnitQuaternion=UnitQuaternion(1.0,0.0,0.0,0.0))
 	tform = trans ∘ LinearMap(quat)
 	settransform!(vis, tform)
 end
@@ -48,7 +50,7 @@ function visPose!(vis::Visualizer,
 	if !updateonly
 		setobject!(vis, Triad(scale))
 		if sphereScale > 0.0
-			sphere = HyperSphere(Point(0., 0, 0), sphereScale)
+			sphere = GeometryBasics.HyperSphere(GeometryBasics.Point(0., 0, 0), sphereScale)
 			matcolor = MeshPhongMaterial(color=color)
 			setobject!(vis[:bal], sphere, matcolor)
 		end
@@ -69,7 +71,7 @@ function visPoint!(vis::Visualizer,
 				   color::RGBA=RGBA(0., 1, 0, 0.5))
 
 	if !updateonly
-		sphere = HyperSphere(Point(0., 0, 0), sphereScale)
+		sphere = GeometryBasics.HyperSphere(GeometryBasics.Point(0., 0, 0), sphereScale)
         matcolor = MeshPhongMaterial(color=color)
         setobject!(vis, sphere, matcolor)
 	end
@@ -86,46 +88,46 @@ function visNode!(vis::Visualizer,
 	              pose::Pose2,
 				  updateonly::Bool=false;
 				  zoffset::Float64=0.0,
-				  # kwargs...)::Nothing
-				  scale::Float64=0.2,
-				  sphereScale::Float64=0.05,
-				  color::RGBA=RGBA(1., 1, 0, 0.5))::Nothing
+				  kwargs...)::Nothing
+				  # scale::Float64=0.2,
+				  # sphereScale::Float64=0.05,
+				  # color::RGBA=RGBA(1., 1, 0, 0.5))::Nothing
 
-	tf = Translation(pose.x, pose.y, zoffset) ∘ LinearMap(CTs.RotZ(pose.θ))
-	visPose!(vis, tf, updateonly, #kwargs...)
-					  scale=scale,
-					  sphereScale=sphereScale,
-					  color=color)
+	tf = Translation(pose.x, pose.y, zoffset) ∘ LinearMap(Rotations.RotZ(pose.θ))
+	visPose!(vis, tf, updateonly; kwargs...)
+					  # scale=scale,
+					  # sphereScale=sphereScale,
+					  # color=color)
 end
 
 function visNode!(vis::Visualizer,
             	  point::Point2,
 				  updateonly::Bool=false;
                   zoffset::Float64=0.0,
-				  # kwargs...)::Nothing
-				  scale::Float64=0.1, #TODO i tried with kwargs...), but missing something
-				  sphereScale::Float64=0.1,
-				  color::RGBA=RGBA(0., 1, 0, 0.5))::Nothing
+				  kwargs...)::Nothing
+				  # scale::Float64=0.1, #TODO i tried with kwargs...), but missing something
+				  # sphereScale::Float64=0.1,
+				  # color::RGBA=RGBA(0., 1, 0, 0.5))::Nothing
 
 	tf = Translation(point.x, point.y, zoffset)
-	visPoint!(vis, tf, updateonly, #kwargs...)
-					   scale=scale,
-					   sphereScale=sphereScale,
-					   color=color)
+	visPoint!(vis, tf, updateonly; kwargs...)
+					   # scale=scale,
+					   # sphereScale=sphereScale,
+					   # color=color)
 end
 
 function visNode!(vis::Visualizer,
             	  point::Point3,
 				  updateonly::Bool=false;
 				  zoffset::Float64=0.0,
-				  # kwargs...)::Nothing
-				  scale::Float64=0.1, #unused but needed for uniformity #TODO maybe replace params with dictionary?
-				  sphereScale::Float64=0.1,
-				  color::RGBA=RGBA(0., 1, 0, 0.5))::Nothing
+				  kwargs...)::Nothing
+				  # scale::Float64=0.1, #unused but needed for uniformity #TODO maybe replace params with dictionary?
+				  # sphereScale::Float64=0.1,
+				  # color::RGBA=RGBA(0., 1, 0, 0.5))::Nothing
 
 	tf = Translation(point...)
-	visPoint!(vis, tf, updateonly, #kwargs...)
-					   scale=scale,
-					   sphereScale=sphereScale,
-					   color=color)
+	visPoint!(vis, tf, updateonly; kwargs...)
+					   # scale=scale,
+					   # sphereScale=sphereScale,
+					   # color=color)
 end
